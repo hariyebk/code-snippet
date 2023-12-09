@@ -12,6 +12,8 @@ export default async function page({params}: {params: {id: string}}) {
         return notFound()
     }
     return (
-        <EditSnippet />
+        <div className="mt-7">
+            <EditSnippet snippet={snippet} />
+        </div>
     )
 }
