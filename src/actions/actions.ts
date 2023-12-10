@@ -2,19 +2,42 @@
 import { db } from "@/db"
 import { redirect, notFound } from "next/navigation"
 
-export async function createSnippet(values: FormData) {
-    const title = values.get("title") as string
-    const code = values.get("code") as string
-    const snippet = await db.snippets.create({
-            data: {
-                title,
-                code        
-            }
-        })
-        if(!snippet){
-            return notFound()
+export async function createSnippet(formState: {message: string}, values: FormData) {
+    const title = values.get("title") 
+    const code = values.get("code")
+    if(!title || typeof title !== "string"){
+        return {
+            message: "please provide the title"
         }
-        redirect("/")
+    }
+    if(!code || typeof code !== "string"){
+        return {
+            message: "please provide the code snippet"
+        }
+    }
+    try{
+    await db.snippets.create({
+        data: {
+            title,
+            code        
+        }
+    })
+    }
+    catch(error: unknown){
+        if(error instanceof Error){
+            return {
+                message: error.message
+            }
+        }
+        else{
+            return {
+                message: "something went wrong!!"
+            }
+        }
+
+    }
+    // putting redirect inside a try catch block will result an error
+    redirect("/")
 }
 export async function findSnippetById(id: number) {
     const snippet = await db.snippets.findUnique({

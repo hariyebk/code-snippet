@@ -1,4 +1,4 @@
-
+"use client"
 export default function Error({error}: {error: ErrorEvent}) {
     return (
         <div className="flex items-center justify-center w-full min-h-screen text-2xl">
