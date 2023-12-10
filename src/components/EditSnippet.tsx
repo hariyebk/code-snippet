@@ -1,7 +1,8 @@
 "use client"
+import * as action from "@/actions/actions"
 import { Editor } from "@monaco-editor/react"
 import { useState } from "react"
-import { db } from "@/db"
+
 interface SnippetProps {
     id: number,
     title: string,
@@ -12,9 +13,10 @@ export default function EditSnippet({snippet}: {snippet: SnippetProps}) {
     function handleEditorChange(value: string = ""){
         setCode(value)
     }
-
+    // pre-loading the server action with the up-to-date state
+    const updateSnippet = action.updateSnippet.bind(null, snippet.id, code)
     return (
-        <form>
+        <div>
             <Editor
             height="40vh"
             theme="vs-dark"
@@ -23,7 +25,9 @@ export default function EditSnippet({snippet}: {snippet: SnippetProps}) {
             onChange={handleEditorChange}
             options={{minimap: {enabled: false}}}
             />
-            <button type="submit" className="mt-4 border border-gray-400 rounded hover:bg-blue-400 px-4 py-2"> edit </button>
-        </form>
+            <form action={updateSnippet}>
+                <button type="submit" className="mt-4 border border-gray-400 rounded hover:bg-blue-400 px-4 py-2"> edit </button>
+            </form>
+        </div>
     )
 }

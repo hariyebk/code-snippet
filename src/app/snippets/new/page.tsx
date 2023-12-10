@@ -1,21 +1,6 @@
-import { db } from "@/db"
-import { redirect } from "next/navigation"
-
+import { createSnippet } from "@/actions/actions"
 
 export default function SnippetCreatePage() {
-    async function createSnippet(values: FormData){
-        "use server"
-        const title = values.get("title") as string
-        const code = values.get("code") as string
-        const snippet = await db.snippets.create({
-            data: {
-                title,
-                code
-            }
-        })
-        redirect("/")
-    }
-    
     return (
         <form action={createSnippet}>
             <h3 className="mt-3"> Create a snippet </h3>
