@@ -1,5 +1,6 @@
 "use server"
 import { db } from "@/db"
+import { revalidatePath } from "next/cache"
 import { redirect, notFound } from "next/navigation"
 
 export async function createSnippet(formState: {message: string}, values: FormData) {
@@ -36,6 +37,7 @@ export async function createSnippet(formState: {message: string}, values: FormDa
         }
 
     }
+    revalidatePath("/")
     // putting redirect inside a try catch block will result an error
     redirect("/")
 }
@@ -59,6 +61,7 @@ export async function updateSnippet(id: number, code: string) {
             code
         }
     })
+    revalidatePath(`/snippets/${id}`)
     redirect(`/snippets/${id}`)
 }
 export async function deleteSnippet(id: number) {
@@ -67,5 +70,6 @@ export async function deleteSnippet(id: number) {
             id
         }
     })
+    revalidatePath("/")
     redirect("/")
 }

@@ -1,5 +1,6 @@
 import * as actions from "@/actions/actions"
 import Link from "next/link"
+import { db } from "@/db"
 
 export default async function page({params}: {params: {id: string}}) {
     const id = parseInt(params.id)
@@ -23,4 +24,15 @@ export default async function page({params}: {params: {id: string}}) {
             </pre>
         </div>
     )
+}
+
+// to implement caching in dynamic routes
+export async function generateStaticParams(){
+    // each snippet collection in out db will be cached individually when next excutes this function during build time
+    const snippets = await db.snippets.findMany()
+    return snippets.map((snippet) => {
+        return {
+            id: snippet.id.toString()
+        }
+    })
 }
